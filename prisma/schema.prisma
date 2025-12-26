@@ -9,17 +9,18 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Post {
   id          Int       @id @default(autoincrement())
-  title       String    @db.VarChar(255)
-  slug        String    @unique @db.VarChar(255)
+  title       String
+  slug        String    @unique
   content     String    @db.Text
-  excerpt     String    @db.VarChar(500)
-  coverImage  String?   @db.VarChar(500)
+  excerpt     String
+  coverImage  String?
   published   Boolean   @default(false)
   views       Int       @default(0)
   createdAt   DateTime  @default(now())
@@ -35,17 +36,17 @@ model Post {
 
 model Category {
   id          Int      @id @default(autoincrement())
-  name        String   @unique @db.VarChar(100)
-  slug        String   @unique @db.VarChar(100)
-  description String?  @db.VarChar(500)
+  name        String   @unique
+  slug        String   @unique
+  description String?
   posts       Post[]
   createdAt   DateTime @default(now())
 }
 
 model Tag {
   id        Int      @id @default(autoincrement())
-  name      String   @unique @db.VarChar(50)
-  slug      String   @unique @db.VarChar(50)
+  name      String   @unique
+  slug      String   @unique
   posts     Post[]   @relation("PostTags")
   createdAt DateTime @default(now())
 }
@@ -53,8 +54,8 @@ model Tag {
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String   @db.Text
-  author    String   @db.VarChar(100)
-  email     String   @db.VarChar(255)
+  author    String
+  email     String
   postId    Int
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
