@@ -12,7 +12,8 @@
       "Bash(DATABASE_URL=\"mysql://root:ljx123456@localhost:3306/myblog\" npx tsx:*)",
       "Bash(npm run dev)",
       "Bash(pkill:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npm run build)"
     ]
   }
 }

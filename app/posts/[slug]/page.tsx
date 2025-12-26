@@ -1,3 +1,4 @@
+import React from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
@@ -101,12 +102,15 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               if (paragraph.trim().startsWith('#')) {
                 const level = paragraph.match(/^#+/)?.[0].length || 1
                 const text = paragraph.replace(/^#+\s*/, '')
-                const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements
-                return (
-                  <HeadingTag key={index} className="font-bold mt-6 mb-4">
-                    {text}
-                  </HeadingTag>
-                )
+                const className = "font-bold mt-6 mb-4"
+
+                // 根据级别返回对应的标题标签
+                if (level === 1) return <h1 key={index} className={className}>{text}</h1>
+                if (level === 2) return <h2 key={index} className={className}>{text}</h2>
+                if (level === 3) return <h3 key={index} className={className}>{text}</h3>
+                if (level === 4) return <h4 key={index} className={className}>{text}</h4>
+                if (level === 5) return <h5 key={index} className={className}>{text}</h5>
+                return <h6 key={index} className={className}>{text}</h6>
               } else if (paragraph.trim().startsWith('```')) {
                 return null
               } else if (paragraph.trim().startsWith('-')) {
@@ -142,7 +146,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           )}
         </article>
 
-        <Comments slug={post.slug} initialComments={post.comments} />
+        <Comments
+          slug={post.slug}
+          initialComments={post.comments.map(comment => ({
+            ...comment,
+            createdAt: comment.createdAt.toISOString()
+          }))}
+        />
       </main>
 
       <footer className="bg-white border-t mt-12">
