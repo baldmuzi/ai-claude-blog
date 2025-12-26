@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --version:*)",
+      "Bash(npm --version)",
+      "Bash(mysql:*)",
+      "Bash(npx create-next-app:*)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npx prisma:*)",
+      "Bash(npx tsx:*)",
+      "Bash(DATABASE_URL=\"mysql://root:ljx123456@localhost:3306/myblog\" npx tsx:*)",
+      "Bash(npm run dev)",
+      "Bash(pkill:*)",
+      "Bash(cat:*)"
+    ]
+  }
+}
