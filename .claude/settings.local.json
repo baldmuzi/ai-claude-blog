@@ -18,7 +18,8 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(DATABASE_URL=\"\" npm run build:*)"
+      "Bash(DATABASE_URL=\"\" npm run build:*)",
+      "Bash(git revert:*)"
     ]
   }
 }
