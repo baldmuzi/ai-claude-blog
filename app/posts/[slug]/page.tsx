@@ -5,14 +5,25 @@ import { prisma } from '@/lib/prisma'
 import Comments from './Comments'
 
 export async function generateStaticParams() {
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-    select: { slug: true }
-  })
+  // 在构建时如果没有数据库连接，返回空数组
+  // 页面将在运行时动态生成
+  if (!process.env.DATABASE_URL) {
+    return []
+  }
 
-  return posts.map((post) => ({
-    slug: post.slug
-  }))
+  try {
+    const posts = await prisma.post.findMany({
+      where: { published: true },
+      select: { slug: true }
+    })
+
+    return posts.map((post) => ({
+      slug: post.slug
+    }))
+  } catch (error) {
+    console.warn('无法在构建时生成静态路径:', error)
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

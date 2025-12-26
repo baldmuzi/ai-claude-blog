@@ -9,52 +9,88 @@ export default async function Home({
   const params = await searchParams
   const { category, tag } = params
 
-  // 构建查询条件
-  const where: any = {
-    published: true,
+  // 检查数据库连接
+  if (!process.env.DATABASE_URL) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="bg-white rounded-lg shadow-md p-8 max-w-md text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">数据库未配置</h1>
+          <p className="text-gray-600 mb-4">
+            请配置 DATABASE_URL 环境变量以连接数据库。
+          </p>
+          <p className="text-sm text-gray-500">
+            在 Vercel 项目设置中添加环境变量，或在本地创建 .env 文件。
+          </p>
+        </div>
+      </div>
+    )
   }
 
-  if (category) {
-    where.category = { slug: category }
-  }
+  let posts, categories, tags
 
-  if (tag) {
-    where.tags = {
-      some: { slug: tag }
+  try {
+    // 构建查询条件
+    const where: any = {
+      published: true,
     }
-  }
 
-  const posts = await prisma.post.findMany({
-    where,
-    include: {
-      category: true,
-      tags: true,
-      _count: {
-        select: { comments: true }
-      }
-    },
-    orderBy: {
-      createdAt: 'desc'
-    },
-    take: 10
-  })
+    if (category) {
+      where.category = { slug: category }
+    }
 
-  const categories = await prisma.category.findMany({
-    include: {
-      _count: {
-        select: { posts: { where: { published: true } } }
+    if (tag) {
+      where.tags = {
+        some: { slug: tag }
       }
     }
-  })
 
-  const tags = await prisma.tag.findMany({
-    include: {
-      _count: {
-        select: { posts: { where: { published: true } } }
+    posts = await prisma.post.findMany({
+      where,
+      include: {
+        category: true,
+        tags: true,
+        _count: {
+          select: { comments: true }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 10
+    })
+
+    categories = await prisma.category.findMany({
+      include: {
+        _count: {
+          select: { posts: { where: { published: true } } }
+        }
       }
-    },
-    take: 20
-  })
+    })
+
+    tags = await prisma.tag.findMany({
+      include: {
+        _count: {
+          select: { posts: { where: { published: true } } }
+        }
+      },
+      take: 20
+    })
+  } catch (error) {
+    console.error('数据库查询失败:', error)
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="bg-white rounded-lg shadow-md p-8 max-w-md text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">数据库连接失败</h1>
+          <p className="text-gray-600 mb-4">
+            无法连接到数据库，请检查数据库配置和连接状态。
+          </p>
+          <p className="text-sm text-gray-500">
+            {error instanceof Error ? error.message : '未知错误'}
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
