@@ -9,7 +9,7 @@
       "Bash(npm install:*)",
       "Bash(npx prisma:*)",
       "Bash(npx tsx:*)",
-      "Bash(DATABASE_URL=\"mysql://root:ljx123456@localhost:3306/myblog\" npx tsx:*)",
+      "Bash(DATABASE_URL=\"localhost:3306/myblog\" npx tsx:*)",
       "Bash(npm run dev)",
       "Bash(pkill:*)",
       "Bash(cat:*)",
@@ -19,7 +19,16 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(DATABASE_URL=\"\" npm run build:*)",
-      "Bash(git revert:*)"
+      "Bash(git revert:*)",
+      "Bash(cloudflared tunnel login:*)",
+      "Bash(chmod:*)",
+      "Bash(bash:*)",
+      "Bash(brew install:*)",
+      "Bash(ngrok version:*)",
+      "Bash(/opt/homebrew/bin/ngrok version)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(ngrok tcp:*)"
     ]
   }
 }
